@@ -76,10 +76,7 @@ class GcePlacementGroupTest(pkb_common_test_case.PkbCommonTestCase):
     self.mock_cmd = mock.patch.object(vm_util, 'IssueCommand').start()
     # Register a fake benchmark
     _BenchmarkSpec(2)
-
-  def tearDown(self):
-    super(GcePlacementGroupTest, self).tearDown()
-    mock.patch.stopall()
+    self.enter_context(self.mock_cmd)
 
   def testPlacementGroupCreate(self):
     self.mock_cmd.return_value = _CREATE_RESPONSE

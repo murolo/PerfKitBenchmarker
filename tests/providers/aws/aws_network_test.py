@@ -96,10 +96,8 @@ class BaseAwsTest(pkb_common_test_case.PkbCommonTestCase):
     super(BaseAwsTest, self).setUp()
     self.mock_aws = mock.patch.object(vm_util, 'IssueCommand').start()
     self.mock_tags = mock.patch.object(util, 'AddDefaultTags').start()
-
-  def tearDown(self):
-    super(BaseAwsTest, self).tearDown()
-    mock.patch.stopall()
+    self.enter_context(self.mock_aws)
+    self.enter_context(self.mock_tags)
 
   def SetExpectedCommands(self, *commands):
     self.mock_aws.reset_mock()

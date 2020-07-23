@@ -58,10 +58,7 @@ class AwsVpcS3EndpointTest(pkb_common_test_case.PkbCommonTestCase):
     self.mock_vpc.region = REGION
     self.mock_run_cmd = mock.patch.object(aws_vpc_endpoint.AwsVpcS3Endpoint,
                                           '_RunCommand').start()
-
-  def testDown(self):
-    super(AwsVpcS3EndpointTest, self).tearDown()
-    mock.patch.stopall()
+    self.enter_context(self.mock_run_cmd)
 
   def _InitEndpoint(self, vpc_id):
     self.mock_vpc.id = vpc_id

@@ -24,18 +24,23 @@ class AzureVirtualMachineTest(pkb_common_test_case.PkbCommonTestCase):
 
   def setUp(self):
     super(AzureVirtualMachineTest, self).setUp()
-    mock.patch(azure_virtual_machine.__name__ +
-               '.azure_network.AzureNetwork.GetNetwork').start()
-    mock.patch(azure_virtual_machine.__name__ +
-               '.azure_network.AzureFirewall.GetFirewall').start()
-    mock.patch(azure_virtual_machine.__name__ +
-               '.azure_network.GetResourceGroup').start()
+    get_network_cmd = mock.patch(
+        azure_virtual_machine.__name__ +
+        '.azure_network.AzureNetwork.GetNetwork').start()
+    get_firewall_cmd = mock.patch(
+        azure_virtual_machine.__name__ +
+        '.azure_network.AzureFirewall.GetFirewall').start()
+    get_resource_group_cmd = mock.patch(
+        azure_virtual_machine.__name__ +
+        '.azure_network.GetResourceGroup').start()
     self.mock_cmd = mock.patch.object(vm_util, 'IssueCommand').start()
-    mock.patch.object(util, 'GetResourceTags').start()
+    get_resource_tags_cmd = mock.patch.object(util, 'GetResourceTags').start()
 
-  def tearDown(self):
-    super(AzureVirtualMachineTest, self).tearDown()
-    mock.patch.stopall()
+    self.enter_context(get_network_cmd)
+    self.enter_context(get_firewall_cmd)
+    self.enter_context(get_resource_group_cmd)
+    self.enter_context(self.mock_cmd)
+    self.enter_context(get_resource_tags_cmd)
 
   @parameterized.expand([
       ('', 'Error Code: QuotaExceeded', 1),
@@ -63,6 +68,7 @@ class AzurePublicIPAddressTest(pkb_common_test_case.PkbCommonTestCase):
     mock.patch(azure_virtual_machine.__name__ +
                '.azure_network.GetResourceGroup').start()
     self.mock_cmd = mock.patch.object(vm_util, 'IssueCommand').start()
+    self.enter_context(self.mock_cmd)
     self.ip_address = azure_virtual_machine.AzurePublicIPAddress(
         'westus2', None, 'test_ip')
 

@@ -33,8 +33,8 @@ class TcpdumpTestCase(pkb_common_test_case.PkbCommonTestCase):
 
   def setUp(self):
     super(TcpdumpTestCase, self).setUp()
-    mock.patch('os.path.isdir', return_value=True).start()
-    self.addCleanup(mock.patch.stopall)
+    os_path_cmd = mock.patch('os.path.isdir', return_value=True).start()
+    self.enter_context(os_path_cmd)
 
   def assertRunLine(self, command):
     expected_command = _CMD_FORMAT.format(command=command)
