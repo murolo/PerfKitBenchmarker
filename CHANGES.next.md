@@ -28,3 +28,5 @@
 -   Fix installing RedHat EPEL on GCP (rhel8,centos8) and AWS (rhel7,rhel8,
     centos8, amazonlinux2)
 -   Correctly install pip rhel8,centos8 all os types.
+-   Use absl parameterized test case.
+
